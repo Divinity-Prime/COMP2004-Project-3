@@ -4,8 +4,10 @@ const port = 3000;
 const cors = require("cors");
 const mongoose = require("mongoose");
 const Product = require("./models/product");
+const User = require("./models/user");
 require("dotenv").config();
 const { DB_URI } = process.env;
+const bcrypt = require("bcrypt");
 
 server.use(cors());
 server.use(express.json());
@@ -79,4 +81,44 @@ server.patch("/products/:id", async (request, response) => {
   } catch (error) {
     console.log(error.message);
   }
+});
+
+server.post("/create-user", async (request, response) => {
+  const { username, password } = request.body;
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const newUser = new User({
+    username,
+    password: hashedPassword,
+  });
+
+  try {
+    await newUser
+      .save()
+      .then((result) =>
+        response.send(`Congrats! created username ${username}`)
+      );
+  } catch (error) {
+    response.send(`Cannot add user: error ${error.message}`);
+  }
+});
+
+server.post("/login", async (request, response) => {
+  const { username, password } = request.body;
+
+  const user = await User.findOne({ username }).then((user) => {
+    if (!user) {
+      return response.status(400).send("Username not found");
+    }
+    bcrypt.compare(password, user.password, (error, result) => {
+      if (error) {
+        return response.status(400).send("An error occured");
+      }
+      if (result) {
+        return response.status(200).send("Login is successful");
+      } else {
+        return response.status(400).send("Incorrect username or password");
+      }
+    });
+  });
 });
