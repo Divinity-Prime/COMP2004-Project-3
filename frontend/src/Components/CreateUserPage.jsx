@@ -48,6 +48,7 @@ export default function CreationUserPage() {
         postResponse={postResponse}
         btnText="Create User"
       />
+      {/* Add a navigate page to the login page */}
       <Link to="/">Back to login page</Link>
     </div>
   );

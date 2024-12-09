@@ -6,8 +6,9 @@ const mongoose = require("mongoose");
 const Product = require("./models/product");
 const User = require("./models/user");
 require("dotenv").config();
-const { DB_URI } = process.env;
+const { DB_URI, JWT_SECRET } = process.env;
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 server.use(cors());
 server.use(express.json());
@@ -105,19 +106,23 @@ server.post("/create-user", async (request, response) => {
 
 server.post("/login", async (request, response) => {
   const { username, password } = request.body;
+  const jwtToken = jwt.sign({ id: username }, JWT_SECRET);
 
   const user = await User.findOne({ username }).then((user) => {
     if (!user) {
-      return response.status(400).send("Username not found");
+      return response.send({ message: "Username not found" });
     }
     bcrypt.compare(password, user.password, (error, result) => {
       if (error) {
-        return response.status(400).send("An error occured");
+        return response.send({ message: "An error occured" });
       }
       if (result) {
-        return response.status(200).send("Login is successful");
+        return response.send({
+          message: "User authenticated",
+          token: jwtToken,
+        });
       } else {
-        return response.status(400).send("Incorrect username or password");
+        return response.send("Incorrect username or password");
       }
     });
   });

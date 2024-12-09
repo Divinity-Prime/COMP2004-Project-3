@@ -2,11 +2,14 @@ export default function NavBar({ quantity }) {
   return (
     <nav className="NavBar">
       <div className="NavDiv NavUser">
-        <h3>Hello, username</h3>
+        <h3>Hello, {currentUser}</h3>
       </div>
       <div className="NavDiv NavTitle">
         <h2>Groceries App 🍎</h2>
       </div>
+      <button onclick="">Add Product</button>
+      <button onclick="">Edit Product</button>
+
       <div className="NavDiv NavCart">
         <img
           src={
