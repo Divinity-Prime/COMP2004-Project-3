@@ -1,14 +1,22 @@
-export default function NavBar({ quantity }) {
+import React from "react";
+import { Link } from "react-router-dom";
+
+export default function NavBar({ quantity, username }) {
   return (
     <nav className="NavBar">
       <div className="NavDiv NavUser">
-        <h3>Hello, {currentUser}</h3>
+        <h3>Hello, {username}</h3>
       </div>
       <div className="NavDiv NavTitle">
         <h2>Groceries App 🍎</h2>
       </div>
-      <button onclick="">Add Product</button>
-      <button onclick="">Edit Product</button>
+      <Link to="/add-product">
+        <button>Add Product</button>
+      </Link>
+
+      {/* <Link to="/edit-product">
+        <button>Edit Product</button>
+      </Link> */}
 
       <div className="NavDiv NavCart">
         <img

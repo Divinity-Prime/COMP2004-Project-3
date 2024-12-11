@@ -4,7 +4,7 @@ export default function NotAuthorized() {
     <div>
       <h1>You are not authorized to view this page</h1>
       <p>
-        Please <Link to="/login">login</Link>first
+        Please <Link to={"/login"}>login</Link> to view this page
       </p>
     </div>
   );

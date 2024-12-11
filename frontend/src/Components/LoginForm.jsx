@@ -23,26 +23,22 @@ export default function LoginForm() {
 
   // Handlers
   const handleCookie = (jwtToken) => {
-    Cookies.setItem("jwt-authorization", jwtToken);
+    Cookies.set("jwt-authorization", jwtToken);
   };
 
   const handleLogin = async () => {
-    try {
-      await axios
-        .post("http://localhost:3000/login", {
-          username: formData.username,
-          password: formData.password,
-        })
-        .then((response) => {
-          setPostResponse(response.data.message);
-          if (response.data.message === "User authenticated") {
-            handleCookie(response.data.token);
-            navigate("/private");
-          }
-        });
-    } catch (error) {
-      setPostResponse(response.data.message);
-    }
+    await axios
+      .post("http://localhost:3000/login", {
+        username: formData.username,
+        password: formData.password,
+      })
+      .then((response) => {
+        setPostResponse(response.data.message);
+        if (response.data.message === "User authenticated") {
+          handleCookie(response.data.token);
+          navigate("/main");
+        }
+      });
   };
 
   const handleOnChange = (e) => {

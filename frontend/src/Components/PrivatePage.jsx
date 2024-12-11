@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 export default function PrivatePage() {
   const [currentUser, setCurrentUser] = useState("");
   const navigate = useNavigate();
+
   useEffect(() => {
     const jwtToken = Cookies.get("jwt-authorization");
     const decodeToken = jwtDecode(jwtToken);
@@ -13,7 +14,7 @@ export default function PrivatePage() {
   }, []);
 
   const handleLogout = () => {
-    Cookies.remove("jwt-authorization");
+    // Cookies.remove("jwt-authorization");
     setCurrentUser("");
     navigate("/login");
   };
@@ -21,6 +22,7 @@ export default function PrivatePage() {
   const handleLikeEdit = () => {
     navigate("/like-edit", { state: { username: currentUser } });
   };
+
   return (
     <div>
       <NavBar />

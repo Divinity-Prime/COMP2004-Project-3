@@ -36,6 +36,7 @@ export default function ProductCard({
       >
         Edit
       </button>
+
       <button className="RemoveButton" onClick={() => handleDeleteProduct(_id)}>
         Delete
       </button>
