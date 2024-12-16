@@ -1,11 +1,10 @@
 import axios from "axios";
 import UserForm from "./UserForm";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 export default function LoginForm() {
   // States
-  // Tracks login form data
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -23,13 +22,12 @@ export default function LoginForm() {
   }, []);
 
   // Handlers
-
-  // Sets JWT token in cookies
+  // Save JWT token in a cookie
   const handleCookie = (jwtToken) => {
     Cookies.set("jwt-authorization", jwtToken);
   };
 
-  // Sends login request to the server
+  // Handle login request to backend
   const handleLogin = async () => {
     await axios
       .post("http://localhost:3000/login", {
@@ -39,20 +37,21 @@ export default function LoginForm() {
       .then((response) => {
         setPostResponse(response.data.message);
         if (response.data.message === "User authenticated") {
+          Cookies.set("given_name", formData.username);
           handleCookie(response.data.token);
-          navigate("/main"); // Redirect to main page
+          navigate("/main");
         }
       });
   };
 
-  // Updates form data on user input
+  // Update form data on change
   const handleOnChange = (e) => {
     setFormData((prevData) => {
       return { ...prevData, [e.target.name]: e.target.value };
     });
   };
 
-  // Handles form submission
+  // Submit form data
   const handleOnSubmit = (e) => {
     e.preventDefault();
     handleLogin();
