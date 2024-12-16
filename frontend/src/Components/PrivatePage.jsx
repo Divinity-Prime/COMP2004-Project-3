@@ -4,6 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 
 export default function PrivatePage() {
+  // State to track the current logged-in user
   const [currentUser, setCurrentUser] = useState("");
   const navigate = useNavigate();
 
@@ -12,13 +13,13 @@ export default function PrivatePage() {
     const decodeToken = jwtDecode(jwtToken);
     setCurrentUser(decodeToken.id);
   }, []);
-
+  // Handle user logout
   const handleLogout = () => {
     // Cookies.remove("jwt-authorization");
     setCurrentUser("");
     navigate("/login");
   };
-
+  // Navigate to like-edit page
   const handleLikeEdit = () => {
     navigate("/like-edit", { state: { username: currentUser } });
   };

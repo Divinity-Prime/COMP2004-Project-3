@@ -1,6 +1,9 @@
 import { useState } from "react";
 import axios from "axios";
+
 export default function ProductForm() {
+  // States
+  // Stores product details from the form
   const [formData, setFormData] = useState({
     productName: "",
     brand: "",
@@ -10,11 +13,15 @@ export default function ProductForm() {
   const [postResponse, setPostResponse] = useState("");
   const [isEditing, setIsEditing] = useState(false);
 
+  // Handle input change
   const handleOnChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Handle form submission
+
   const handleOnSubmit = async (e) => {
+    // If editing, update the product
     if (isEditing) {
       e.preventDefault();
       handleUpdateProduct(formData._id);
@@ -45,7 +52,7 @@ export default function ProductForm() {
       }
     }
   };
-
+  // Handle updating a product
   const handleUpdateProduct = async (productId) => {
     try {
       await axios
@@ -66,8 +73,9 @@ export default function ProductForm() {
   };
 
   return (
-    <div className="product-form">
-      <h2>Product Form</h2>
+    <div className="Product-form">
+      {/* <h1>Product Form</h1> */}
+      <h1>{isEditing ? "Edit Product" : "Add Product"}</h1>
       <form onSubmit={handleOnSubmit}>
         <input
           type="text"
@@ -111,6 +119,7 @@ export default function ProductForm() {
         <button type="submit">{isEditing ? "Edit" : "Submit"}</button>
       </form>
       {postResponse && <p>{postResponse}</p>}
+      <a href="/main">Back to Products</a>
     </div>
   );
 }

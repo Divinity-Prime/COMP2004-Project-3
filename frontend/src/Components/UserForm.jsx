@@ -6,7 +6,7 @@ export default function UserForm({
   btnText,
 }) {
   return (
-    <div>
+    <div className="UserForm">
       <form onSubmit={handleOnSubmit}>
         <div>
           <p>Username</p>

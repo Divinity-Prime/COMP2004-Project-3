@@ -5,7 +5,7 @@ export default function NavBar({ quantity, username }) {
   return (
     <nav className="NavBar">
       <div className="NavDiv NavUser">
-        <h3>Hello, {username}</h3>
+        <h3>Hello, {username || "Nobody"}</h3>
       </div>
       <div className="NavDiv NavTitle">
         <h2>Groceries App 🍎</h2>

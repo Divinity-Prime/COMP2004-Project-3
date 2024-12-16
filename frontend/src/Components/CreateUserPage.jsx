@@ -13,6 +13,7 @@ export default function CreationUserPage() {
   const navigate = useNavigate();
 
   // Handlers
+  // Handle user creation
   const handleCreateUser = async () => {
     try {
       axios
@@ -23,12 +24,14 @@ export default function CreationUserPage() {
     }
   };
 
+  // Update form data on input change
   const handleOnChange = (e) => {
     setFormData((prevData) => {
       return { ...prevData, [e.target.name]: e.target.value };
     });
   };
 
+  // Handle form submission
   const handleOnSubmit = (e) => {
     e.preventDefault();
     handleCreateUser();
@@ -40,7 +43,8 @@ export default function CreationUserPage() {
 
   //Renderer
   return (
-    <div>
+    <div className="LoginForm">
+      <h1>Creating User</h1>
       <Userform
         handleOnChange={handleOnChange}
         handleOnSubmit={handleOnSubmit}
@@ -48,7 +52,7 @@ export default function CreationUserPage() {
         postResponse={postResponse}
         btnText="Create User"
       />
-      {/* Add a navigate page to the login page */}
+      {/* Link to navigate back to the login page */}
       <Link to="/">Back to login page</Link>
     </div>
   );

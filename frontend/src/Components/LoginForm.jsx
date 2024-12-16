@@ -1,10 +1,11 @@
 import axios from "axios";
 import UserForm from "./UserForm";
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 export default function LoginForm() {
   // States
+  // Tracks login form data
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -22,10 +23,13 @@ export default function LoginForm() {
   }, []);
 
   // Handlers
+
+  // Sets JWT token in cookies
   const handleCookie = (jwtToken) => {
     Cookies.set("jwt-authorization", jwtToken);
   };
 
+  // Sends login request to the server
   const handleLogin = async () => {
     await axios
       .post("http://localhost:3000/login", {
@@ -36,17 +40,19 @@ export default function LoginForm() {
         setPostResponse(response.data.message);
         if (response.data.message === "User authenticated") {
           handleCookie(response.data.token);
-          navigate("/main");
+          navigate("/main"); // Redirect to main page
         }
       });
   };
 
+  // Updates form data on user input
   const handleOnChange = (e) => {
     setFormData((prevData) => {
       return { ...prevData, [e.target.name]: e.target.value };
     });
   };
 
+  // Handles form submission
   const handleOnSubmit = (e) => {
     e.preventDefault();
     handleLogin();
@@ -56,7 +62,7 @@ export default function LoginForm() {
     });
   };
   return (
-    <div>
+    <div className="LoginForm">
       <h1>Groceries App</h1>
       <UserForm
         handleOnChange={handleOnChange}

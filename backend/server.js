@@ -14,6 +14,7 @@ server.use(cors());
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 
+// Connecting to MongoDB
 mongoose
   .connect(DB_URI)
   .then(() => {
@@ -25,10 +26,12 @@ mongoose
     console.log(error);
   });
 
+// Testing
 server.get("/", (request, response) => {
   response.send("LIVE!");
 });
 
+// Get all products
 server.get("/products", async (request, response) => {
   try {
     await Product.find().then((result) => response.status(200).send(result));
@@ -37,6 +40,7 @@ server.get("/products", async (request, response) => {
   }
 });
 
+// Add a new product
 server.post("/add-product", async (request, response) => {
   const { productName, brand, image, price } = request.body;
   const product = new Product({
@@ -56,6 +60,7 @@ server.post("/add-product", async (request, response) => {
   }
 });
 
+// Delete a product by ID
 server.delete("/products/:id", async (request, response) => {
   const { id } = request.params;
   try {
@@ -67,6 +72,7 @@ server.delete("/products/:id", async (request, response) => {
   }
 });
 
+// Update a product by ID
 server.patch("/products/:id", async (request, response) => {
   const prodId = request.params.id;
   const { productName, brand, image, price, id } = request.body;
@@ -84,6 +90,7 @@ server.patch("/products/:id", async (request, response) => {
   }
 });
 
+// Create a new user
 server.post("/create-user", async (request, response) => {
   const { username, password } = request.body;
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -104,6 +111,7 @@ server.post("/create-user", async (request, response) => {
   }
 });
 
+// User login and authentication
 server.post("/login", async (request, response) => {
   const { username, password } = request.body;
   const jwtToken = jwt.sign({ id: username }, JWT_SECRET);

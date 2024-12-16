@@ -15,26 +15,14 @@ function App() {
         <Routes>
           <Route element={<PrivateRoute />}>
             <Route path="/private" element={<PrivatePage />} />
+            <Route path="/main" element={<GroceriesAppContainer />} />
+            <Route path="/add-product" element={<ProductForm />} />
+            <Route path="/edit-product/:id" element={<ProductForm />} />
           </Route>
 
-          <Route path="/not-authorized" element={<NotAuthorized />} />
-
-          {/* <Route path="/" element={<h1>Login Page</h1>} /> */}
-          {/* <Route path="/login" element={<LoginForm />} /> */}
           <Route path="/" element={<LoginForm />} />
           <Route path="/create-user" element={<CreateUserPage />} />
-          <Route path="/private" element={<PrivatePage />} />
-
-          <Route path="/main" element={<GroceriesAppContainer />} />
-
-          <Route
-            path="/add-product"
-            element={<ProductForm isEditing={false} />}
-          />
-          <Route
-            path="/edit-product/:id"
-            element={<ProductForm isEditing={true} />}
-          />
+          <Route path="/not-authorized" element={<NotAuthorized />} />
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

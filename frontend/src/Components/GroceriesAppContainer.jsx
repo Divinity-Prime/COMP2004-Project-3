@@ -3,6 +3,7 @@ import CartContainer from "./CartContainer";
 import ProductsContainer from "./ProductsContainer";
 import NavBar from "./NavBar";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import ProductForm from "./ProductForm";
 
 export default function GroceriesAppContainer() {
@@ -11,6 +12,8 @@ export default function GroceriesAppContainer() {
   const [cartList, setCartList] = useState([]);
   const [productList, setProductList] = useState([]);
   const [postResponse, setPostResponse] = useState("");
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     productName: "",
     brand: "",
@@ -41,42 +44,7 @@ export default function GroceriesAppContainer() {
       console.log(error.message);
     }
   };
-
-  const handleOnChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleOnSubmit = async (e) => {
-    if (isEditing) {
-      e.preventDefault();
-      handleUpdateProduct(formData._id);
-      setIsEditing(false);
-      setFormData({
-        productName: "",
-        brand: "",
-        image: "",
-        price: "",
-      });
-    } else {
-      e.preventDefault();
-      try {
-        await axios
-          .post("http://localhost:3000/add-product", formData)
-          .then((result) => {
-            setPostResponse(result.data);
-          });
-        setFormData({
-          productName: "",
-          brand: "",
-          image: "",
-          price: "",
-        });
-      } catch (error) {
-        console.log(error.message);
-      }
-    }
-  };
-
+  // Set form data for editing a product
   const handleEditProduct = (product) => {
     setFormData({
       productName: product.productName,
@@ -87,27 +55,10 @@ export default function GroceriesAppContainer() {
     });
     setIsEditing(true);
     setPostResponse("");
+    navigate("/edit-product/:id", { isEditing: true });
   };
 
-  const handleUpdateProduct = async (productId) => {
-    try {
-      await axios
-        .patch(`http://localhost:3000/products/${productId}`, formData)
-        .then((result) => {
-          setPostResponse(result.data);
-        });
-      setFormData({
-        productName: "",
-        brand: "",
-        image: "",
-        price: "",
-      });
-      setIsEditing(false);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-
+  // Increase quantity of a product in cart
   const handleAddQuantity = (productId, mode) => {
     if (mode === "cart") {
       const newCartList = cartList.map((product) => {
@@ -130,6 +81,7 @@ export default function GroceriesAppContainer() {
     }
   };
 
+  // Decrease quantity of a product in cart
   const handleRemoveQuantity = (productId, mode) => {
     if (mode === "cart") {
       const newCartList = cartList.map((product) => {
@@ -152,6 +104,7 @@ export default function GroceriesAppContainer() {
     }
   };
 
+  // Delete a product by ID
   const handleDeleteProduct = async (productId) => {
     try {
       await axios
@@ -164,6 +117,7 @@ export default function GroceriesAppContainer() {
     }
   };
 
+  // Add a product to the cart
   const handleAddToCart = (productId) => {
     const product = productList.find((product) => product.id === productId);
     const pQuantity = productQuantity.find(
@@ -183,11 +137,13 @@ export default function GroceriesAppContainer() {
     setCartList(newCartList);
   };
 
+  // Remove a product from the cart
   const handleRemoveFromCart = (productId) => {
     const newCartList = cartList.filter((product) => product.id !== productId);
     setCartList(newCartList);
   };
 
+  // Clear all items from the cart
   const handleClearCart = () => {
     setCartList([]);
   };
@@ -196,13 +152,6 @@ export default function GroceriesAppContainer() {
     <div>
       <NavBar quantity={cartList.length} />
       <div className="GroceriesApp-Container">
-        {/* <ProductForm
-          handleOnSubmit={handleOnSubmit}
-          postResponse={postResponse}
-          handleOnChange={handleOnChange}
-          formData={formData}
-          isEditing={isEditing}
-        /> */}
         <ProductsContainer
           products={productList}
           handleAddQuantity={handleAddQuantity}
